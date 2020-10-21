@@ -5,7 +5,7 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable){
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
      ST = SystemTable;
-    Status = ST->ConOut->OutputString(ST->ConOut, L"Hello World\n\r");
+    Status = ST->ConOut->OutputString(ST->ConOut, L"Welcome to SleepyOS\n\r");
     if (EFI_ERROR(Status))
         return Status;
     Status = ST->ConIn->Reset(ST->ConIn, FALSE);
