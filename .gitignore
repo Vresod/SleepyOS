@@ -1,4 +1,4 @@
-kernel/UEFI/apps/
-kernel/UEFI/gnuefi/
-kernel/UEFI/inc/
-kernel/UEFI/lib/
+kernel/apps/
+kernel/gnuefi/
+kernel/inc/
+kernel/lib/
