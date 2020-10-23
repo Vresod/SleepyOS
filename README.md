@@ -5,9 +5,18 @@ x86 architecture with just EFI support.
 
 ## Questions
 
-### What happened to BIOS?
-I don't want to do 2 kernels. Thanks for understanding!
+
+### What is this?
+Kernel written in near pure C (`.h` files are NOT C++). You can flash it on real hardware or use a virtual machine.
 
 ### What's this based off of?
 Nothing. If you count OSDev's barebones (UEFI) as being "based",
 then yes, it is based off of that.
+
+
+### How do I flash it on real hardware?
+```
+dd if=sleepyos of=[device] bs=4M
+```
+
+Then, restart the computer.
