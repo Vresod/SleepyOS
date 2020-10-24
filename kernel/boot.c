@@ -1,11 +1,7 @@
-/* Bootloader for Sleepy OS.
- * I am not 100% sure it's a bootloader
- * though */
+/* Bootloader for SleepyOS. */
 
 #include <efi.h>
 #include <efilib.h>
- 
-
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable){
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
