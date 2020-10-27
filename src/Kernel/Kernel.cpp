@@ -11,8 +11,8 @@ extern "C" {
 void kernel_main() {
     Terminal& terminal = Terminal::instance();
     terminal.setCursor(0, 0);
-    terminal << EOL;
+    terminal << status_eol;
 
-    terminal << OP_OK << " SleepyOS has booted." << EOL;
+    terminal << status_good << " SleepyOS has booted." << status_eol;
 }
 }

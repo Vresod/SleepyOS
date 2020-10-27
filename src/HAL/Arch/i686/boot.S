@@ -1,44 +1,51 @@
-# boot.S for SleepyOS
+# Multiboot header constants
 .set ALIGN,    1<<0             # load modules on page boundaries
 .set MEMINFO,  1<<1             # memory map
 .set FLAGS,    ALIGN | MEMINFO  # multiboot flags
 .set MAGIC,    0x1BADB002       # magic number
 .set CHECKSUM, -(MAGIC + FLAGS) # header checksum
-# multiboot header
+
+
+# Multiboot Header
 .section .multiboot
 .align 4
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
 
-
-# Memory for intial thread
+# Memory for initial thread
 .section .bss
 .align 16
 stack_bottom:
-  .skip 16384 # 16 KiB
+  .skip 16384 # 16 kib
 stack_top:
 
-
-
+/* the linker script specifies _start as the entry
+ * point for the kernel */
 .section .text
 .global _start
 .type _start, @function
 _start:
+  /* stack */
   mov $stack_top, %esp
   cli
+  mov %cr0, %eax
+  or 1, %al
+  mov %eax, %cr0
   jmp $0x8, $protectedModeMain
 
-
 protectedModeMain:
+
   sti
+
+  /* here we call kernel_main */
   call kernel_main
-  call term_test_post
+  /* if the system has nothing else to do, put the pc
+ *  into an infinite loop */
 
 1:  hlt
-    jmp 1b
-
+  jmp 1b
 ;
-;
-;.size _start, . - _start
-;
+;;/* set thie size of the _start symbol to the current location */
+;;.size _start, . - _start
+;;

@@ -35,7 +35,7 @@ export BUILD_DIR
 
 # Targets
 
-bin: clean # Requires clean target
+bin: clean
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(OBJ_DIR)
 	mkdir -p $(OBJ_DIR_HAL)
@@ -49,11 +49,16 @@ bin: clean # Requires clean target
 	
 
 	# S E E P L U S P L U S
+	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c -DARCH=\"$(ARCH)\"
 	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c $(KERNEL_SRC_DIR)/Kernel.cpp -DARCH=\"$(ARCH)\"
+	$(CXX) -MF$(OBJ_DIR_HAL)/terminal.cpp.o.d -o $(OBJ_DIR_HAL)/terminal.cpp.o -c $(HAL_SRC_DIR)/HALFunctions/terminal.cpp
+	$(CXX) -MF$(OBJ_DIR_HAL)/terminal.cpp.o.d -o $(OBJ_DIR_HAL)/terminal.cpp.o -c $(HAL_SRC_DIR)/HALFunctions/terminal.cpp
 
+	# BUG FIX (ISSUE #2)
+	$(CXX_LINK) -o $(BUILD_DIR)/sleepy.bin $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/terminal.cpp.o $(OBJ_DIR_HAL)/boot.S.o
 
 image: bin # Requires bin target
-	$(IMAGE_GEN) $(GRUB-CFG) $(BUILD_DIR)/sleepy.kernel $(MKRESCUE)
+	$(IMAGE_GEN) $(GRUB-CFG) $(BUILD_DIR)/sleepy.bin $(MKRESCUE)
 
 qemu:
 	$(MAKE) image ARCH=i686
