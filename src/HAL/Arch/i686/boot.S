@@ -1,15 +1,14 @@
 # boot.S for SleepyOS
-.set ALIGN,     1<<0
-.set MEMINFO,   1<<1
-.set FLAGS,     ALIGN | MEMINFO
-.set MAGIC,     -(MAGIC + FLAGS)
-
-
+.set ALIGN,    1<<0             # load modules on page boundaries
+.set MEMINFO,  1<<1             # memory map
+.set FLAGS,    ALIGN | MEMINFO  # multiboot flags
+.set MAGIC,    0x1BADB002       # magic number
+.set CHECKSUM, -(MAGIC + FLAGS) # header checksum
 # multiboot header
 .section .multiboot
 .align 4
 .long MAGIC
-.log FLAGS
+.long FLAGS
 .long CHECKSUM
 
 

@@ -2,7 +2,7 @@
 
 
 mkdir -p iso/boot/grub
-cp sleepy.kernel isodir/boot/sleepy.kernel
-cp grub.i686.cfg isodir/boot/grub/grub.i686.cfg
+cp bin/sleepy.kernel src/Kernel/isodir/boot/sleepy.kernel
+cp src/Kernel/grub.i686.cfg src/Kernel/isodir/boot/grub/grub.i686.cfg
 
 grub-mkrescue -o sleepy.iso iso/
