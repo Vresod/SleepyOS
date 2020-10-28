@@ -20,3 +20,7 @@ dd if=sleepyos of=[device] bs=4M
 ```
 
 Then, restart the computer.
+
+## Credits
+rizet             -- most of his code
+osdev IRC channel -- helping me get grub working
