@@ -55,7 +55,7 @@ bin: clean
 	$(CXX) -MF$(OBJ_DIR_HAL)/terminal.cpp.o.d -o $(OBJ_DIR_HAL)/terminal.cpp.o -c $(HAL_SRC_DIR)/HALFunctions/terminal.cpp
 
 	# BUG FIX (ISSUE #2)
-	$(CXX_LINK) -o $(BUILD_DIR)/sleepy.bin $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/terminal.cpp.o $(OBJ_DIR_HAL)/boot.S.o
+	$(CXX_LINK) -o $(BUILD_DIR)/sleepy.bin $(OBJ_DIR_HAL)/boot.S.o $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/terminal.cpp.o
 
 image: bin # Requires bin target
 	$(IMAGE_GEN) $(GRUB-CFG) $(BUILD_DIR)/sleepy.bin $(MKRESCUE)
