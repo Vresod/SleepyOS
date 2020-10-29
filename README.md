@@ -7,7 +7,7 @@ x86 architecture with just EFI support.
 
 
 ### What is this?
-Kernel written in near pure C (`.h` files are NOT C++). You can flash it on real hardware or use a virtual machine.
+Kernel written in  C and other languages. (`.h` files are NOT C++). You can flash it on real hardware or use a virtual machine.
 
 ### What's this based off of?
 Nothing. If you count OSDev's barebones (UEFI) as being "based",
