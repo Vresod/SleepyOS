@@ -46,7 +46,7 @@ bin: clean
 	# C O O M P I L E
 	
 	# A S S E M B L Y
-	i686-elf-cross/bin/i686-elf-as $(HAL_SRC_DIR)/boot.S -o $(OBJ_DIR_HAL)/boot.o
+	i686-elf-cross/bin/i686-elf-as $(HAL_SRC_DIR)/boot.s -o $(OBJ_DIR_HAL)/boot.o
 	#Add stuff as needed btw
 	
 
