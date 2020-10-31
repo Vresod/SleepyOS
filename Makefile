@@ -1,3 +1,5 @@
+# Note that you are going to want to export to PATH (source dir)
+
 .DEFAULT_GOAL := all
 
 MKRESCUE = grub-mkrescue
@@ -44,18 +46,15 @@ bin: clean
 	# C O O M P I L E
 	
 	# A S S E M B L Y
-	$(CC)  -MF$(OBJ_DIR_HAL)/boot.S.o.d -o $(OBJ_DIR_HAL)/boot.S.o -c $(HAL_SRC_DIR)/boot.S
-	# Add stuff as needed btw
+	i686-elf-cross/bin/i686-elf-as $(HAL_SRC_DIR)/boot.S -o $(OBJ_DIR_HAL)/boot.o
+	#Add stuff as needed btw
 	
 
 	# S E E P L U S P L U S
-	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c -DARCH=\"$(ARCH)\"
-	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c $(KERNEL_SRC_DIR)/Kernel.cpp -DARCH=\"$(ARCH)\"
-	$(CXX) -MF$(OBJ_DIR_HAL)/terminal.cpp.o.d -o $(OBJ_DIR_HAL)/terminal.cpp.o -c $(HAL_SRC_DIR)/HALFunctions/terminal.cpp
-	$(CXX) -MF$(OBJ_DIR_HAL)/terminal.cpp.o.d -o $(OBJ_DIR_HAL)/terminal.cpp.o -c $(HAL_SRC_DIR)/HALFunctions/terminal.cpp
+	i686-elf-cross/bin/i686-elf-gcc -c src/Kernel/Kernel.c -o $(OBJ_DIR_HAL)/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 	# BUG FIX (ISSUE #2)
-	$(CXX_LINK) -o $(BUILD_DIR)/sleepy.bin $(OBJ_DIR_HAL)/boot.S.o $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/terminal.cpp.o
+	$(CXX_LINK) -o $(BUILD_DIR)/sleepy.bin $(OBJ_DIR_HAL)/boot.o $(OBJ_DIR_HAL)/kernel.o
 
 image: bin # Requires bin target
 	$(IMAGE_GEN) $(GRUB-CFG) $(BUILD_DIR)/sleepy.bin $(MKRESCUE)

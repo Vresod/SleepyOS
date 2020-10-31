@@ -35,13 +35,13 @@ private:
         void operator=(Terminal const&);
 };
 
-template<typename T>
+template <typename T>
 Terminal& operator<<(Terminal& term, T data){
         term.write(data);
         return term;
 }
 
-template<typename T>
+template <typename T>
 Terminal* operator<<(Terminal* term, T data){
         term->write(data);
         return term;

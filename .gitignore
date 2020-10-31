@@ -2,3 +2,8 @@ kernel/apps/
 kernel/gnuefi/
 kernel/inc/
 kernel/lib/
+i686-elf-cross/
+build/
+
+build/binutils-2.33.1
+build/build-binutils
