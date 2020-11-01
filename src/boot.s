@@ -34,16 +34,6 @@ _start:
 
 	cli
 
-	call loadGDT
-
-	mov %cr0, %eax
-	or 1, %al
-	mov %eax, %cr0
-
-	call loadIDT
-
-	call configurePIC
-
 	jmp $0x8, $protectedModeMain
 
 protectedModeMain:
@@ -52,9 +42,6 @@ protectedModeMain:
 
 	/* here we call kernel_main */
 	call kernel_main
-
-	/* test for terminal, post-kernel */
-	call term_test_post
 
 	/* if the system has nothing else to do, put the pc
 	into an infinite loop */

@@ -29,7 +29,7 @@ ASM := nasm -f elf
 STATIC_LINK := llvm-ar
 OBJCOPY := objcopy -O elf32-i386 -B i386 -I binary
 CXX_LINK := clang++ -o -Wl,--as-needed -Wl,--no-undefined --target=i686-pc-none-elf -march=i686 -nostdlib -ffreestanding -O2 -Wall -Wextra -fno-pic -fno-threadsafe-statics -Wl,--build-id=none -Wreturn-type -fpermissive
-IMAGE_GEN := $(KERNEL_SRC_DIR)/gen_image.sh
+IMAGE_GEN := src/geniso.sh
 GRUB_CFG := $(KERNEL_SRC_DIR)/grub.cfg
 
 export MKRESCUE
@@ -41,10 +41,10 @@ bin: clean
 	mkdir -p $(OBJ_DIR)
 	mkdir -p $(OBJ_DIR_HAL)
 	mkdir -p $(OBJ_DIR_RES)
-	$(CC)  -MF$(OBJ_DIR_HAL)/boot.s.o.d -o $(OBJ_DIR_HAL)/boot.s.o -c src/boot.s
-	$(CXX) -MF$(OBJ_DIR_HAL)/Terminal.cpp.o.d -o $(OBJ_DIR_HAL)/Terminal.cpp.o -c src/header/terminal.cpp
-	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c src/kernel.cpp -DARCH=\"$(ARCH)\"
-	$(CXX_LINK) -o $(BUILD_DIR)/microCORE.kernel $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/boot.s.o $(OBJ_DIR_HAL)/Terminal.cpp.o -T $(HAL_SRC_DIR)/Linker.ld
+	$(CC)  -MF$(OBJ_DIR_HAL)/boot.s.o.d -o $(OBJ_DIR_HAL)/boot.s.o -c src/boot.s || exit
+	$(CXX) -MF$(OBJ_DIR_HAL)/Terminal.cpp.o.d -o $(OBJ_DIR_HAL)/Terminal.cpp.o -c src/header/terminal.cpp || exit
+	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c src/kernel.cpp -DARCH=\"$(ARCH)\" || exit
+	$(CXX_LINK) -o $(BUILD_DIR)/sleepy.bin $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/boot.s.o $(OBJ_DIR_HAL)/Terminal.cpp.o -T src/linker.ld || exit
 
 image: bin
 	$(IMAGE_GEN) $(GRUB_CFG) $(BUILD_DIR)/sleepy.bin $(MKRESCUE)

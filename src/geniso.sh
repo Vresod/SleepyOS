@@ -1,9 +1,8 @@
 mkdir -p ./iso/boot/grub
-mkdir -p ./iso/System/Kernel/
-cp grub.cfg ./iso/boot/grub/grub.cfg
+cp src/grub.cfg ./iso/boot/grub/grub.cfg
 
 # Copy the kernel...
-cp ./sleepy.kernel ./iso/System/Kernel/sleepy.kernel
+cp bin/sleepy.bin ./iso/boot/sleepy.bin
 
 # Generate kernel
-grub-mkrescue -o sleepy.iso ./iso
+grub-mkrescue -o sleepy.iso ./iso || exit
