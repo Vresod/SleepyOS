@@ -41,10 +41,9 @@ bin: clean
 	mkdir -p $(OBJ_DIR)
 	mkdir -p $(OBJ_DIR_HAL)
 	mkdir -p $(OBJ_DIR_RES)
-	$(CC)  -MF$(OBJ_DIR_HAL)/boot.s.o.d -o $(OBJ_DIR_HAL)/boot.s.o -c $(HAL_SRC_DIR)/boot.s
-	$(CXX) -MF$(OBJ_DIR_HAL)/Terminal.cpp.o.d -o $(OBJ_DIR_HAL)/Terminal.cpp.o -c $(HAL_SRC_DIR)/HALFunctions/Terminal.cpp
-	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c $(KERNEL_SRC_DIR)/Kernel.cpp -DARCH=\"$(ARCH)\"
-	$(OBJCOPY) $(FONTS_DIR)/font.psf $(OBJ_DIR_RES)/font.o
+	$(CC)  -MF$(OBJ_DIR_HAL)/boot.s.o.d -o $(OBJ_DIR_HAL)/boot.s.o -c src/boot.s
+	$(CXX) -MF$(OBJ_DIR_HAL)/Terminal.cpp.o.d -o $(OBJ_DIR_HAL)/Terminal.cpp.o -c src/header/terminal.cpp
+	$(CXX) -MF$(OBJ_DIR_HAL)/Kernel.cpp.o.d -o $(OBJ_DIR)/Kernel.cpp.o -c src/kernel.cpp -DARCH=\"$(ARCH)\"
 	$(CXX_LINK) -o $(BUILD_DIR)/microCORE.kernel $(OBJ_DIR)/Kernel.cpp.o $(OBJ_DIR_HAL)/boot.s.o $(OBJ_DIR_HAL)/Terminal.cpp.o -T $(HAL_SRC_DIR)/Linker.ld
 
 image: bin
