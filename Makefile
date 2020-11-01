@@ -55,5 +55,6 @@ qemu:
 	
 clean:
 	rm -rfv $(BUILD_DIR) iso
+	rm sleepy.iso
 
 all: image

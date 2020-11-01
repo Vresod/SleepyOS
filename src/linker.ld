@@ -1,46 +1,24 @@
 ENTRY(_start)
-
+ 
 SECTIONS
 {
-	VGA_POINTER = 0xb8000;
-	. = 0xb8000;
-	. += 80 * 25 * 2;
-
 	. = 1M;
-
-	.multiboot :
+	.text BLOCK(4K) : ALIGN(4K)
 	{
-		KEEP(*(.multiboot))
-		. = ALIGN(4K);
+		*(.multiboot)
+		*(.text)
 	}
-
-	.text :
+	.rodata BLOCK(4K) : ALIGN(4K)
 	{
-		*(.text .text.*)
-		. = ALIGN(4K);
+		*(.rodata)
 	}
-
-	.rodata :
+	.data BLOCK(4K) : ALIGN(4K)
 	{
-		*(.rodata .rodata.*)
-		. = ALIGN(4K);
+		*(.data)
 	}
-
-	.data :
+	.bss BLOCK(4K) : ALIGN(4K)
 	{
-		*(.data.rel.ro.local*) *(.data.rel.ro .data.rel.ro.*) *(.data.*)
-		. = ALIGN(4K);
-	}
-
-	.gdt :
-	{
-		*(.gdt)
-		. = ALIGN(4K);
-	}
-
-	.bss :
-	{
-		*(.bss .bss.*);
-		. = ALIGN(4K);
+		*(COMMON)
+		*(.bss)
 	}
 }
