@@ -2,7 +2,8 @@
 #include "str.h"
 #include "macro.h"
 
-enum vga_color{
+enum vga_color
+{
     VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
 	VGA_COLOR_GREEN = 2,
@@ -21,11 +22,13 @@ enum vga_color{
 	VGA_COLOR_WHITE = 15
 };
 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg){
+static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
+{
 	return bg | fg << 4;
 }
 
-static inline uint16_t vga_entry(unsigned char uc, uint8_t color){
+static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
+{
 	return (uint16_t)uc | (uint16_t)color << 8;
 }
 
@@ -36,64 +39,81 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color){
 Terminal::Terminal() : row(0), column(0)
 {
 	buffer = (uint16_t *)0xB8000;
-	for (auto y = 0; y < VGA_HEIGHT; y++){
-		for (auto x = 0; x < VGA_WIDTH; x++){
+	for (auto y = 0; y < VGA_HEIGHT; y++)
+	{
+		for (auto x = 0; x < VGA_WIDTH; x++)
+		{
 			put_entry_at(' ', VGA_COLOR_LIGHT_GREY, x, y);
 		}
 	}
 }
 
-void Terminal::clear(){
-	for (int y = 0; y < VGA_HEIGHT; y++){
-		for (int x = 0; x < VGA_WIDTH; x++){
+void Terminal::clear()
+{
+	for (int y = 0; y < VGA_HEIGHT; y++)
+	{
+		for (int x = 0; x < VGA_WIDTH; x++)
+		{
 			auto index = (y * VGA_WIDTH) + x;
 			buffer[index] = 0;
 		}
 	}
 }
 
-void Terminal::put_entry_at(char c, uint8_t color, size_t x, size_t y){
+void Terminal::put_entry_at(char c, uint8_t color, size_t x, size_t y)
+{
 	auto index = (y * VGA_WIDTH) + x;
 	buffer[index] = vga_entry(c, color);
 }
 
-void Terminal::put_char(char c, uint8_t color){
+void Terminal::put_char(char c, uint8_t color)
+{
 	if (c == 0)
 		return;
 
-	if (c != '\n'){
+	if (c != '\n')
+	{
 		put_entry_at(c, color, column, row);
 	}
-	if (++column >= VGA_WIDTH){
+	if (++column >= VGA_WIDTH)
+	{
 		column = 0;
-		if (++row >= VGA_HEIGHT){
+		if (++row >= VGA_HEIGHT)
+		{
 			shift();
 		}
 	}
-	if (c == '\n'){
-		if (++row >= VGA_HEIGHT){
+	if (c == '\n')
+	{
+		if (++row >= VGA_HEIGHT)
+		{
 			shift();
 		}
 		column = 0;
 	}
 }
 
-void Terminal::write(const char *data, size_t size){
+void Terminal::write(const char *data, size_t size)
+{
 	uint8_t color = VGA_COLOR_LIGHT_GREY;
 	char colorCode[15];
 
-	for (; *data != '\0'; data++){
-		if (*data == '$'){
+	for (; *data != '\0'; data++)
+	{
+		if (*data == '$')
+		{
 			int iter = 0;
 			data++;
 			while (true)
 			{
-				if (*data != '!'){
+				if (*data != '!')
+				{
 					colorCode[iter] = *data;
 					iter++;
 					data++;
 				}
-				else {
+				else
+				{
 					data++;
 					break;
 				}
@@ -119,15 +139,19 @@ void Terminal::write(const char *data, size_t size){
 		put_char(*data, color);
 	}
 }
-void Terminal::write(const char *data){
+void Terminal::write(const char *data)
+{
 	write(data, strlen(data));
 }
-void Terminal::setCursor(size_t columnc, size_t rowc){
+void Terminal::setCursor(size_t columnc, size_t rowc)
+{
 	column = columnc;
 	row = rowc;
 }
-void Terminal::write(int data){
-	auto convert = [](unsigned int num){
+void Terminal::write(int data)
+{
+	auto convert = [](unsigned int num)
+	{
 		static char numberCharacters[]= "0123456789";
 		static char buffer[64];
 		char *ptr;
@@ -148,13 +172,16 @@ void Terminal::write(int data){
 	}
 	write(convert(data));
 }
-void Terminal::println(const char *data){
+void Terminal::println(const char *data)
+{
 	write(data);
 	write("\n");
 }
 
-void Terminal::shift(){
-    for (int i = 0; i < 80; i++){
+void Terminal::shift()
+{
+    for (int i = 0; i < 80; i++)
+    {
         buffer[i] = vga_entry(0, 0);
     }
 

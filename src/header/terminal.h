@@ -1,3 +1,7 @@
+/* Taken from https://github.com/microNET-OS/microCORE/blob/9109cef7ca7efd0263e68fc2ab2c745db3376dd0/src/HardwareAbstractionLayer/Headers/Terminal.h */
+// THIS IS NOT MY CODE.
+// THIS IS RIZET'S.
+// I'M USING THIS BECAUSE I CAN (BOTH OUR REPOS ARE LICENSED UNDER GPLV3) (FAIR USE)
 #pragma once
 
 #include "stddef.h"
@@ -35,14 +39,14 @@ private:
         void operator=(Terminal const&);
 };
 
-template <typename T>
-Terminal& operator<<(Terminal& term, T data){
+template<typename T>
+Terminal& operator<<(Terminal& term, T data) {
         term.write(data);
         return term;
 }
 
-template <typename T>
-Terminal* operator<<(Terminal* term, T data){
+template<typename T>
+Terminal* operator<<(Terminal* term, T data) {
         term->write(data);
         return term;
 }
